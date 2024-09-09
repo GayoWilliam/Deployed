@@ -31,19 +31,17 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user = Auth::user();
-        // $associatedAccount = $user->azureAccount;
+        $associatedAccount = $user->azureAccount;
 
-        // if (!$associatedAccount) {
-        //     return redirect()->back()->withErrors(['login' => 'No associated Azure account found.']);
-        // }
+        if (!$associatedAccount) {
+            return redirect()->back()->withErrors(['login' => 'No associated Azure account found.']);
+        }
 
         $tenantId = config('services.azure.tenant_id');
         $clientId = config('services.azure.client_id');
         $clientSecret = config('services.azure.client_secret');
-        $azureUsername = $user->email;
-        $azurePassword = "Kenchic2024";
-        // $azureUsername = $associatedAccount->azure_account;
-        // $azurePassword = $associatedAccount->password;
+        $azureUsername = $associatedAccount->azure_account;
+        $azurePassword = $associatedAccount->password;
 
         $response = Http::asForm()->post("https://login.microsoftonline.com/{$tenantId}/oauth2/v2.0/token", [
             'grant_type' => 'password',

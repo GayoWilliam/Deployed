@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        
+        $user = Auth::user();
         $accessToken = session('azure_access_token');
         $reportId = config('services.azure.report_id');
         $response = Http::withHeaders([
@@ -18,7 +19,10 @@ class DashboardController extends Controller
 
         if ($response->getStatusCode() == 200) {
             $report = $response->json();
-            return view('dashboard', ['report' => $report]);
+            return view('dashboard', [
+                'user' => $user,
+                'report' => $report
+            ]);
         }
 
         return view('dashboard');

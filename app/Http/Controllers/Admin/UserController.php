@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
 use App\Models\AssociatedAzure;
+use App\Models\DataFilter;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
@@ -17,7 +18,7 @@ class UserController extends Controller
     {
         $roles = Role::all();
         $azureAccounts = AssociatedAzure::all();
-
+        $filters = DataFilter::all();
         $users = User::where([
             ['name', '!=', Null],
             [
@@ -31,7 +32,7 @@ class UserController extends Controller
             ]
         ])->orderBy('name', 'asc')->with('azureAccount')->get();
 
-        return view('admin.users.index', compact('users', 'roles', 'azureAccounts'));
+        return view('admin.users.index', compact('users', 'roles', 'azureAccounts', 'filters'));
     }
 
     public function create()
@@ -67,13 +68,42 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        $validated = $request->validate(['role' => 'required']);
-        if ($user->hasRole($validated)) {
-            return back()->with('message', 'Role exists');
-        } else {
-            $user->removeRole($user->role);
-            $user->assignRole($validated);
-            $user->update($validated);
+        if($request->role){
+            $validated_role = $request->validate([
+                'role' => ['required'],
+            ]);
+            
+            if ($user->hasRole($validated_role)) {
+                return back()->with('message', 'Role exists');
+            } else {
+                $user->removeRole($user->role);
+                $user->assignRole($validated_role);
+                $user->update($validated_role);
+            }
+        }
+
+        if($request->table_name){
+            $validated_table = $request->validate([
+                'table_name' => ['required'],
+            ]);
+            
+            $user->update($validated_table);
+        }
+
+        if($request->column_name){
+            $validated_column = $request->validate([
+                'column_name' => ['required'],
+            ]);
+            
+            $user->update($validated_column);
+        }
+
+        if($request->column_value){
+            $validated_column_value = $request->validate([
+                'column_value' => ['required'],
+            ]);
+            
+            $user->update($validated_column_value);
         }
 
         return to_route('admin.users.index')->with('message', 'User updated successfully!');

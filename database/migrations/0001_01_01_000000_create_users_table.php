@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('role');
+            $table->string('table_name')->nullable();
+            $table->string('column_name')->nullable();
+            $table->string('column_value')->nullable();
             $table->foreignId('azure_account_id')->nullable()->constrained('associated_azure_accounts')->onDelete('set null');
             $table->string('password')->nullable();
             $table->rememberToken();

@@ -11,22 +11,39 @@
             id: '{{ $report['id'] }}',
             settings: {
                 filterPaneEnabled: false,
-                navContentPaneEnabled: true
+                navContentPaneEnabled: false
             }
         };
-
-        console.log("Embed Configuration: ", embedConfiguration);
 
         var reportContainer = document.getElementById('reportContainer-{{ $report['id'] }}');
         var report = powerbi.embed(reportContainer, embedConfiguration);
 
-        report.on('loaded', function() {
-            console.log("Report loaded successfully.");
+        var globalFilter = {
+            $schema: "http://powerbi.com/product/schema#basic",
+            target: {
+                table: "{{ Auth::user()->table_name }}",
+                column: "{{ Auth::user()->column_name }}"
+            },
+            operator: "In",
+            values: ["{{ Auth::user()->column_value }}"],
+            filterType: models.FilterType.BasicFilter
+        };
+
+        localStorage.setItem("globalFilter", JSON.stringify(globalFilter));
+
+        function applyGlobalFilter(report) {
+            var storedFilter = JSON.parse(localStorage.getItem("globalFilter"));
+            if (storedFilter) {
+                report.setFilters([storedFilter])
+            }
+        }
+
+        report.on('loaded', function () {
+            applyGlobalFilter(report);
         });
 
-        report.on('error', function(event) {
-            var errorMsg = event.detail;
-            console.error("Embedding Error: ", errorMsg);
+        report.on('pageChanged', function () {
+            applyGlobalFilter(report);
         });
     </script>
 </x-app-layout>

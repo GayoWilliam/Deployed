@@ -22,7 +22,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'azure_account_id',
-        'role'
+        'role',
+        'table_name',
+        'column_name',
+        'column_value'
     ];
 
     /**

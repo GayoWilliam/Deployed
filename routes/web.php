@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\AssociationController;
+use App\Http\Controllers\Admin\DataFilterController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -29,6 +30,7 @@ Route::middleware(['auth', 'can:view admin'])->name('admin.')->prefix('admin')->
     Route::resource('/permissions', PermissionController::class);
     Route::resource('/users', UserController::class)->middleware('can:view users');
     Route::resource('/associations', AssociationController::class)->middleware('can:view associations');
+    Route::resource('/filters', DataFilterController::class)->middleware('can:view filters');
     Route::put('/users/{user}/associate', [UserController::class, 'associateAzureAccount'])->name('associations');
 });
 

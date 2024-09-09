@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PermissionSeeder::class);
         $this->call(RoleSeeder::class);
         $this->call(AzureAssociations::class);
+        $this->call(DataFilterSeeder::class);
         $this->call(AdminSeeder::class);
     }
 }

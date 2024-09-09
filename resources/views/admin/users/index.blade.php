@@ -101,6 +101,9 @@
                                 <th class="px-4 py-4">User</th>
                                 <th class="px-4">Associated Powerbi Account</th>
                                 <th class="px-4">Role</th>
+                                <th class="px-4">Table</th>
+                                <th class="px-4">Column</th>
+                                <th class="px-4">Value</th>
                                 @can('delete user')
                                     <th class="px-4">Action</th>
                                 @endcan
@@ -167,6 +170,82 @@
                                             </form>
                                         @else
                                             <x-label-auth for="role_description" value="{{ $user->role }}" />
+                                        @endif
+                                    </td>
+
+                                    <td class="px-4 py-3 text-xs">
+                                        @if (Auth::user()->can('edit user table'))
+                                            <form method="POST" action="{{ route('admin.users.update', $user->id) }}">
+                                                @csrf
+                                                @method('PUT')
+
+                                                <select onchange="this.form.submit()"
+                                                    class="mt-1 block w-4/5 min:w-4/5 border-0 bg-transparent text-xs
+                                                            shadow-sm shadow-kenchic-blue group-hover:shadow-kenchic-gold hover:shadow-md focus:shadow-md focus:shadow-kenchic-blue focus:border-none focus:ring-0
+                                                            rounded-md transition ease-in-out duration-150"
+                                                    id="table_name" name="table_name">
+                                                    <option disabled selected>{{ $user->table_name }}</option>
+                                                    @foreach ($filters as $filter)
+                                                        <option value="{{ $filter->table_name }}"
+                                                            {{ $user->table_name == $filter->table_name ? 'selected' : '' }}>
+                                                            {{ $filter->table_name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </form>
+                                        @else
+                                            <x-label-auth for="role_description" value="{{ $user->table_name }}" />
+                                        @endif
+                                    </td>
+
+                                    <!-- Column Name -->
+                                    <td class="px-4 py-3 text-xs">
+                                        @if (Auth::user()->can('edit user column'))
+                                            <form method="POST" action="{{ route('admin.users.update', $user->id) }}">
+                                                @csrf
+                                                @method('PUT')
+
+                                                <select id="column_name" name="column_name" onchange="this.form.submit()"
+                                                    class="mt-1 block w-4/5 border-0 bg-transparent text-xs shadow-sm">
+                                                    <option disabled selected>{{ $user->column_name }}</option>
+                                                    @foreach ($filters as $filter)
+                                                        <option value="{{ $filter->column_name }}"
+                                                            {{ $user->column_name == $filter->column_name ? 'selected' : '' }}>
+                                                            {{ $filter->column_name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </form>
+                                        @else
+                                            <x-label-auth for="role_description" value="{{ $user->column_name }}" />
+                                        @endif
+                                    </td>
+
+                                    <!-- Column Value -->
+                                    <td class="px-4 py-3 text-xs">
+                                        @if (Auth::user()->can('edit user value'))
+                                            <form method="POST" action="{{ route('admin.users.update', $user->id) }}">
+                                                @csrf
+                                                @method('PUT')
+
+                                                <select id="column_value" name="column_value" onchange="this.form.submit()"
+                                                    class="mt-1 block w-4/5 border-0 bg-transparent text-xs shadow-sm">
+                                                    <option disabled selected>{{ $user->column_value }}</option>
+                                                    @php
+                                                        // Get the possible values for the selected column
+                                                        $current_filter = $filters->firstWhere('column_name', $user->column_name);
+                                                        $possible_values = $current_filter ? json_decode($current_filter->possible_values, true) : [];
+                                                    @endphp
+                                                    @foreach ($possible_values as $value)
+                                                        <option value="{{ $value }}"
+                                                            {{ $user->column_value == $value ? 'selected' : '' }}>
+                                                            {{ $value }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </form>
+                                        @else
+                                            <x-label-auth value="{{ $user->column_value }}" />
                                         @endif
                                     </td>
 
