@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Crypt;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -30,17 +31,19 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user = Auth::user();
-        $associatedAccount = $user->azureAccount;
+        // $associatedAccount = $user->azureAccount;
 
-        if (!$associatedAccount) {
-            return redirect()->back()->withErrors(['login' => 'No associated Azure account found.']);
-        }
+        // if (!$associatedAccount) {
+        //     return redirect()->back()->withErrors(['login' => 'No associated Azure account found.']);
+        // }
 
         $tenantId = config('services.azure.tenant_id');
         $clientId = config('services.azure.client_id');
         $clientSecret = config('services.azure.client_secret');
-        $azureUsername = $associatedAccount->azure_account;
-        $azurePassword = $associatedAccount->password;
+        $azureUsername = $user->email;
+        $azurePassword = "Kenchic2024";
+        // $azureUsername = $associatedAccount->azure_account;
+        // $azurePassword = $associatedAccount->password;
 
         $response = Http::asForm()->post("https://login.microsoftonline.com/{$tenantId}/oauth2/v2.0/token", [
             'grant_type' => 'password',
@@ -50,7 +53,7 @@ class AuthenticatedSessionController extends Controller
             'username' => $azureUsername,
             'password' => $azurePassword,
         ]);
-
+        
         if ($response->getStatusCode() == 200) {
             $tokens = $response->json();
             $azureAccessToken = $tokens['access_token'] ?? null;
