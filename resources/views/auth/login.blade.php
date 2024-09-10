@@ -57,17 +57,17 @@
 
                 <!-- Remember Me -->
                 <div class="flex items-center justify-between mt-4">
-                    <div class="block">
+                    <div class="flex items-center">
                         <label for="remember_me" class="inline-flex items-center">
                             <input id="remember_me" type="checkbox"
                                 class="rounded border-transparent text-kenchic-blue" name="remember">
                             <span
-                                class="ml-2 text-xs transition ease-in-out duration-150 hover:text-kenchic-blue hover:text-opacity-80 font-bold leading-tight">{{ __('Remember me') }}</span>
+                                class="ml-2 text-xs transition ease-in-out duration-150 hover:text-kenchic-red hover:cursor-pointer font-bold leading-tight">{{ __('Remember me') }}</span>
                         </label>
                     </div>
 
                     @if (Route::has('password.request'))
-                        <a class="text-xs font-bold hover:text-kenchic-blue hover:text-opacity-80 transition ease-in-out duration-150"
+                        <a class="text-xs font-bold hover:text-kenchic-red hover:text-opacity-80 transition ease-in-out duration-150"
                             href="{{ route('password.request') }}">
                             {{ __('Forgot your password?') }}
                         </a>
