@@ -1,6 +1,6 @@
 <x-admin-layout>
     <x-slot name="header">
-        {{ __('Data Fitlers') }}
+        {{ __('Data Filters') }}
     </x-slot>
 
     <div class="w-full">
@@ -17,15 +17,15 @@
                             </svg>
                         </div>
                         <x-text-input-auth type="text" id="table-search-users" class="block p-2 pl-10"
-                            placeholder="Search for User" name="search" value="{{ request('search') }}" autofocus />
+                            placeholder="Search for Filter" name="search" value="{{ request('search') }}" autofocus />
                     </form>
                 </div>
 
-                @can('add user')
+                <!-- @can('add filters')
                     <x-primary-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'create-user')">
                         {{ __('Add Filters') }}
                     </x-primary-button>
-                @endcan
+                @endcan -->
             </div>
 
             <!-- Users table -->
@@ -33,21 +33,20 @@
                 <div class="scrollbar-hide w-full overflow-y-auto max-h-screen">
                     <table class="w-full whitespace-no-wrap max-h-screen">
                         <thead>
-                            <tr
-                                class="sticky top-0 z-10 text-[10px] text-left text-kenchic-gold uppercase bg-kenchic-blue border-b-2 border-kenchic-gold">
+                            <tr class="sticky top-0 z-10 text-[10px] text-left text-kenchic-gold uppercase bg-kenchic-blue border-b-2 border-kenchic-gold">
                                 <th class="px-4 py-4">Table</th>
                                 <th class="px-4">Column</th>
                                 <th class="px-4">Possible Values</th>
-                                @can('delete user')
+                                @can('delete filters')
                                     <th class="px-4">Action</th>
                                 @endcan
                             </tr>
                         </thead>
-                        <tbody class="bg-transparent divide-kenchic-blue divide-opacity-10 divide-y">
+                        <tbody class="bg-transparent divide-kenchic-blue divide-opacity-10 divide-y text-xs">
                             @foreach ($filters as $filter)
                                 <tr
                                     class="hover:bg-kenchic-blue group hover:text-kenchic-gold transition ease-in-out duration-150 leading-tight">
-                                    <td class="px-4 py-4">
+                                    <td class="px-4 py-3">
                                         <p>{{ $filter->table_name }}</p>
                                     </td>
 

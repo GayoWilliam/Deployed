@@ -130,7 +130,7 @@
                                                 @csrf
                                                 @method('PUT')
                                                 <select name="azure_account_id" onchange="this.form.submit()"
-                                                    class="mt-1 block w-4/5 min:w-4/5 border-0 bg-transparent text-xs
+                                                    class="mt-1 block w-full min:w-4/5 border-0 bg-transparent text-xs
                                                             shadow-sm shadow-kenchic-blue group-hover:shadow-kenchic-gold hover:shadow-md focus:shadow-md focus:shadow-kenchic-blue focus:border-none focus:ring-0
                                                             rounded-md transition ease-in-out duration-150">
                                                     <option value="" {{ $user->azureAccount ? '' : 'selected' }}>None
@@ -155,7 +155,7 @@
                                                 @method('PUT')
 
                                                 <select onchange="this.form.submit()"
-                                                    class="mt-1 block w-4/5 min:w-4/5 border-0 bg-transparent text-xs
+                                                    class="mt-1 block w-full min:w-4/5 border-0 bg-transparent text-xs
                                                             shadow-sm shadow-kenchic-blue group-hover:shadow-kenchic-gold hover:shadow-md focus:shadow-md focus:shadow-kenchic-blue focus:border-none focus:ring-0
                                                             rounded-md transition ease-in-out duration-150"
                                                     id="role" name="role">
@@ -180,7 +180,7 @@
                                                 @method('PUT')
 
                                                 <select onchange="this.form.submit()"
-                                                    class="mt-1 block w-4/5 min:w-4/5 border-0 bg-transparent text-xs
+                                                    class="mt-1 block w-full min:w-4/5 border-0 bg-transparent text-xs
                                                             shadow-sm shadow-kenchic-blue group-hover:shadow-kenchic-gold hover:shadow-md focus:shadow-md focus:shadow-kenchic-blue focus:border-none focus:ring-0
                                                             rounded-md transition ease-in-out duration-150"
                                                     id="table_name" name="table_name">
@@ -206,7 +206,9 @@
                                                 @method('PUT')
 
                                                 <select id="column_name" name="column_name" onchange="this.form.submit()"
-                                                    class="mt-1 block w-4/5 border-0 bg-transparent text-xs shadow-sm">
+                                                    class="mt-1 block w-full min:w-4/5 border-0 bg-transparent text-xs
+                                                            shadow-sm shadow-kenchic-blue group-hover:shadow-kenchic-gold hover:shadow-md focus:shadow-md focus:shadow-kenchic-blue focus:border-none focus:ring-0
+                                                            rounded-md transition ease-in-out duration-150">
                                                     <option disabled selected>{{ $user->column_name }}</option>
                                                     @foreach ($filters as $filter)
                                                         <option value="{{ $filter->column_name }}"
@@ -229,7 +231,9 @@
                                                 @method('PUT')
 
                                                 <select id="column_value" name="column_value" onchange="this.form.submit()"
-                                                    class="mt-1 block w-4/5 border-0 bg-transparent text-xs shadow-sm">
+                                                    class="mt-1 block w-full min:w-4/5 border-0 bg-transparent text-xs
+                                                            shadow-sm shadow-kenchic-blue group-hover:shadow-kenchic-gold hover:shadow-md focus:shadow-md focus:shadow-kenchic-blue focus:border-none focus:ring-0
+                                                            rounded-md transition ease-in-out duration-150">
                                                     <option disabled selected>{{ $user->column_value }}</option>
                                                     @php
                                                         // Get the possible values for the selected column
