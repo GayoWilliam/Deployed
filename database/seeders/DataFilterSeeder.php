@@ -13,16 +13,19 @@ class DataFilterSeeder extends Seeder
      */
     public function run(): void
     {
-        DataFilter::create([
-            'table_name' => 'dim_customer',
-            'column_name' => 'Group',
-            'possible_values' => json_encode(["Retail", "HORECA", "Economy"]),
-        ]);
+        $filters = [
+            [
+                'column_name' => 'Group',
+                'possible_values' => json_encode(["Retail", "HORECA", "Economy"]),
+            ],
+            [
+                'column_name' => 'region_group',
+                'possible_values' => json_encode(["Eastern", "Western", "Mt Kenya", "Naivasha - Nakuru", "Mombasa"]),
+            ]
+        ];
 
-        DataFilter::create([
-            'table_name' => 'dim_customer',
-            'column_name' => 'region_group',
-            'possible_values' => json_encode(["Eastern", "Western", "Mt Kenya", "Naivasha - Nakuru", "Mombasa"]),
-        ]);
+        foreach ($filters as $filter) {
+            DataFilter::create(array_merge(['table_name' => 'dim_customer'], $filter));
+        }
     }
 }

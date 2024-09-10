@@ -184,10 +184,11 @@
                                                             shadow-sm shadow-kenchic-blue group-hover:shadow-kenchic-gold hover:shadow-md focus:shadow-md focus:shadow-kenchic-blue focus:border-none focus:ring-0
                                                             rounded-md transition ease-in-out duration-150"
                                                     id="table_name" name="table_name">
-                                                    <option disabled selected>{{ $user->table_name }}</option>
+                                                    <!-- <option disabled selected>{{ $user->table_name }}</option> -->
+                                                    <option value="" {{ $user->table_name ? '' : 'selected' }}>None
                                                     @foreach ($filters as $filter)
                                                         <option value="{{ $filter->table_name }}"
-                                                            {{ $user->table_name == $filter->table_name ? 'selected' : '' }}>
+                                                            {{ $user->table_name == $filter->table_name ? 'selected disabled' : '' }}>
                                                             {{ $filter->table_name }}
                                                         </option>
                                                     @endforeach
@@ -209,10 +210,11 @@
                                                     class="mt-1 block w-full min:w-4/5 border-0 bg-transparent text-xs
                                                             shadow-sm shadow-kenchic-blue group-hover:shadow-kenchic-gold hover:shadow-md focus:shadow-md focus:shadow-kenchic-blue focus:border-none focus:ring-0
                                                             rounded-md transition ease-in-out duration-150">
-                                                    <option disabled selected>{{ $user->column_name }}</option>
+                                                    <!-- <option disabled selected>{{ $user->column_name }}</option> -->
+                                                    <option value="" {{ $user->column_name ? '' : 'selected' }}>None
                                                     @foreach ($filters as $filter)
                                                         <option value="{{ $filter->column_name }}"
-                                                            {{ $user->column_name == $filter->column_name ? 'selected' : '' }}>
+                                                            {{ $user->column_name == $filter->column_name ? 'selected disabled' : '' }}>
                                                             {{ $filter->column_name }}
                                                         </option>
                                                     @endforeach
@@ -234,7 +236,8 @@
                                                     class="mt-1 block w-full min:w-4/5 border-0 bg-transparent text-xs
                                                             shadow-sm shadow-kenchic-blue group-hover:shadow-kenchic-gold hover:shadow-md focus:shadow-md focus:shadow-kenchic-blue focus:border-none focus:ring-0
                                                             rounded-md transition ease-in-out duration-150">
-                                                    <option disabled selected>{{ $user->column_value }}</option>
+                                                    <!-- <option disabled selected>{{ $user->column_value }}</option> -->
+                                                    <option value="" {{ $user->column_value ? '' : 'selected' }}>None
                                                     @php
                                                         // Get the possible values for the selected column
                                                         $current_filter = $filters->firstWhere('column_name', $user->column_name);
@@ -242,7 +245,7 @@
                                                     @endphp
                                                     @foreach ($possible_values as $value)
                                                         <option value="{{ $value }}"
-                                                            {{ $user->column_value == $value ? 'selected' : '' }}>
+                                                            {{ $user->column_value == $value ? 'selected disabled' : '' }}>
                                                             {{ $value }}
                                                         </option>
                                                     @endforeach

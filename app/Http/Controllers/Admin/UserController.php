@@ -82,28 +82,13 @@ class UserController extends Controller
             }
         }
 
-        if($request->table_name){
-            $validated_table = $request->validate([
-                'table_name' => ['required'],
-            ]);
-            
-            $user->update($validated_table);
-        }
+        $fields = ['table_name', 'column_name', 'column_value'];
 
-        if($request->column_name){
-            $validated_column = $request->validate([
-                'column_name' => ['required'],
-            ]);
-            
-            $user->update($validated_column);
-        }
-
-        if($request->column_value){
-            $validated_column_value = $request->validate([
-                'column_value' => ['required'],
-            ]);
-            
-            $user->update($validated_column_value);
+        foreach ($fields as $field) {
+            if ($request->has($field)) {
+                $validated_data = $request->validate([$field => ['required']]);
+                $user->update($validated_data);
+            }
         }
 
         return to_route('admin.users.index')->with('message', 'User updated successfully!');
