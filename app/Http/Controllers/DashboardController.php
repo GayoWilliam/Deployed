@@ -12,6 +12,13 @@ class DashboardController extends Controller
         $user = Auth::user();
         $accessToken = session('azure_access_token');
         $reportId = config('services.azure.report_id');
+
+        // Check if the user has an associated Power BI account
+        if (!$accessToken || !$user->azureAccount) {
+            return view('dashboard', ['error' => "You cannot view the report because you don't have an associated Power BI account. Kindly contact your administrator."]);
+        }
+
+        // Proceed with the Power BI API request
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $accessToken,
             'Accept' => 'application/json',
@@ -21,7 +28,7 @@ class DashboardController extends Controller
             $report = $response->json();
             return view('dashboard', [
                 'user' => $user,
-                'report' => $report
+                'report' => $report,
             ]);
         }
 
