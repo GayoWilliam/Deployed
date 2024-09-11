@@ -68,11 +68,11 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        if($request->role){
+        if ($request->role) {
             $validated_role = $request->validate([
                 'role' => ['required'],
             ]);
-            
+
             if ($user->hasRole($validated_role)) {
                 return back()->with('message', 'Role exists');
             } else {
@@ -82,11 +82,36 @@ class UserController extends Controller
             }
         }
 
-        $fields = ['table_name', 'column_name', 'column_value'];
+        if ($request->has('table_name')) {
+            if (empty($request->table_name)) {
+                $user->update([
+                    'table_name' => null,
+                    'column_name' => null,
+                    'column_value' => null,
+                ]);
+            } else {
+                $validated_data = $request->validate(['table_name' => ['required']]);
+                $user->update($validated_data);
+            }
+        }
 
-        foreach ($fields as $field) {
-            if ($request->has($field)) {
-                $validated_data = $request->validate([$field => ['required']]);
+        if ($request->has('column_name')) {
+            if (empty($request->column_name)) {
+                $user->update([
+                    'column_name' => null,
+                    'column_value' => null,
+                ]);
+            } else {
+                $validated_data = $request->validate(['column_name' => ['required']]);
+                $user->update($validated_data);
+            }
+        }
+
+        if ($request->has('column_value')) {
+            if (empty($request->column_value)) {
+                $user->update(['column_value' => null]);
+            } else {
+                $validated_data = $request->validate(['column_value' => ['required']]);
                 $user->update($validated_data);
             }
         }
