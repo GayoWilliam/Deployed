@@ -173,6 +173,7 @@
                                         @endif
                                     </td>
 
+                                    <!-- Table Name -->
                                     <td class="px-4 py-3 text-xs">
                                         @if (Auth::user()->can('edit user table'))
                                             <form method="POST" action="{{ route('admin.users.update', $user->id) }}">
@@ -184,7 +185,6 @@
                                                             shadow-sm shadow-kenchic-blue group-hover:shadow-kenchic-gold hover:shadow-md focus:shadow-md focus:shadow-kenchic-blue focus:border-none focus:ring-0
                                                             rounded-md transition ease-in-out duration-150"
                                                     id="table_name" name="table_name">
-                                                    <!-- <option disabled selected>{{ $user->table_name }}</option> -->
                                                     <option value="" {{ $user->table_name ? '' : 'selected' }}>None
                                                     @foreach ($filters as $filter)
                                                         <option value="{{ $filter->table_name }}"
@@ -210,7 +210,6 @@
                                                     class="mt-1 block w-full min:w-4/5 border-0 bg-transparent text-xs
                                                             shadow-sm shadow-kenchic-blue group-hover:shadow-kenchic-gold hover:shadow-md focus:shadow-md focus:shadow-kenchic-blue focus:border-none focus:ring-0
                                                             rounded-md transition ease-in-out duration-150">
-                                                    <!-- <option disabled selected>{{ $user->column_name }}</option> -->
                                                     <option value="" {{ $user->column_name ? '' : 'selected' }}>None
                                                     @foreach ($filters as $filter)
                                                         <option value="{{ $filter->column_name }}"
@@ -236,10 +235,8 @@
                                                     class="mt-1 block w-full min:w-4/5 border-0 bg-transparent text-xs
                                                             shadow-sm shadow-kenchic-blue group-hover:shadow-kenchic-gold hover:shadow-md focus:shadow-md focus:shadow-kenchic-blue focus:border-none focus:ring-0
                                                             rounded-md transition ease-in-out duration-150">
-                                                    <!-- <option disabled selected>{{ $user->column_value }}</option> -->
                                                     <option value="" {{ $user->column_value ? '' : 'selected' }}>None
                                                     @php
-                                                        // Get the possible values for the selected column
                                                         $current_filter = $filters->firstWhere('column_name', $user->column_name);
                                                         $possible_values = $current_filter ? json_decode($current_filter->possible_values, true) : [];
                                                     @endphp
