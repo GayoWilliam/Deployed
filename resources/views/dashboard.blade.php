@@ -19,7 +19,7 @@
                 id: '{{ $report['id'] }}',
                 settings: {
                     filterPaneEnabled: false,
-                    navContentPaneEnabled: true
+                    navContentPaneEnabled: false
                 }
             };
 
