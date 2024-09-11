@@ -109,10 +109,12 @@
                                 @endcan
                             </tr>
                         </thead>
+                        
                         <tbody class="bg-transparent divide-kenchic-blue divide-opacity-10 divide-y">
                             @foreach ($users as $user)
-                                <tr
-                                    class="hover:bg-kenchic-blue group hover:text-kenchic-gold transition ease-in-out duration-150 leading-tight">
+                                <tr class="hover:bg-kenchic-blue group hover:text-kenchic-gold transition ease-in-out duration-150 leading-tight">
+                                    
+                                    <!-- User Name and Email -->
                                     <td class="px-4 py-2">
                                         <div class="flex items-center text-xs">
                                             <div>
@@ -124,6 +126,7 @@
                                         </div>
                                     </td>
 
+                                    <!-- User Associated PowerBi Account -->
                                     <td class="px-4 py-3 text-xs">
                                         @can('edit user association')
                                             <form method="POST" action="{{ route('admin.associations', $user->id) }}">
@@ -148,8 +151,9 @@
                                         @endcan
                                     </td>
 
+                                    <!-- User Role -->
                                     <td class="px-4 py-3 text-xs">
-                                        @if (Auth::user()->can('edit user role'))
+                                        @can('edit user role')
                                             <form method="POST" action="{{ route('admin.users.update', $user->id) }}">
                                                 @csrf
                                                 @method('PUT')
@@ -169,13 +173,13 @@
                                                 </select>
                                             </form>
                                         @else
-                                            <x-label-auth for="role_description" value="{{ $user->role }}" />
-                                        @endif
+                                            <span>{{ $user->role ?? 'None' }}</span>
+                                        @endcan
                                     </td>
 
                                     <!-- Table Name -->
                                     <td class="px-4 py-3 text-xs">
-                                        @if (Auth::user()->can('edit user table'))
+                                        @can('edit user table')
                                             <form method="POST" action="{{ route('admin.users.update', $user->id) }}">
                                                 @csrf
                                                 @method('PUT')
@@ -195,13 +199,13 @@
                                                 </select>
                                             </form>
                                         @else
-                                            <x-label-auth for="role_description" value="{{ $user->table_name }}" />
-                                        @endif
+                                            <span>{{ $user->table_name ?? 'None' }}</span>
+                                        @endcan
                                     </td>
 
                                     <!-- Column Name -->
                                     <td class="px-4 py-3 text-xs">
-                                        @if (Auth::user()->can('edit user column'))
+                                        @can('edit user column')
                                             <form method="POST" action="{{ route('admin.users.update', $user->id) }}">
                                                 @csrf
                                                 @method('PUT')
@@ -220,13 +224,13 @@
                                                 </select>
                                             </form>
                                         @else
-                                            <x-label-auth for="role_description" value="{{ $user->column_name }}" />
-                                        @endif
+                                            <span>{{ $user->column_name ?? 'None' }}</span>
+                                        @endcan
                                     </td>
 
                                     <!-- Column Value -->
                                     <td class="px-4 py-3 text-xs">
-                                        @if (Auth::user()->can('edit user value'))
+                                        @can('edit user value')
                                             <form method="POST" action="{{ route('admin.users.update', $user->id) }}">
                                                 @csrf
                                                 @method('PUT')
@@ -249,10 +253,11 @@
                                                 </select>
                                             </form>
                                         @else
-                                            <x-label-auth value="{{ $user->column_value }}" />
-                                        @endif
+                                            <span>{{ $user->column_value ?? 'None' }}</span>
+                                        @endcan
                                     </td>
 
+                                    <!-- Delete User -->
                                     @can('delete user')
                                         <td class="px-4 py-3">
                                             <div class="flex items-center space-x-4 text-xs">

@@ -61,7 +61,7 @@
                                     @can('view associations')
                                         <x-admin-link :href="route('admin.associations.index')" :active="request()->routeIs('admin.associations.index')">Account Associations</x-admin-link>
                                     @endcan
-                                    @can('view filters')
+                                    @can('view data filters')
                                         <x-admin-link :href="route('admin.filters.index')" :active="request()->routeIs('admin.filters.index')">Data Filters</x-admin-link>
                                     @endcan
                                 </div>
