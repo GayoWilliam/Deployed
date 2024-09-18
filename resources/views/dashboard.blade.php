@@ -33,7 +33,7 @@
                     column: "{{ Auth::user()->column_name }}"
                 },
                 operator: "In",
-                values: ["{{ Auth::user()->column_value }}"],
+                values: {!! json_encode(Auth::user()->column_value) !!},
                 filterType: models.FilterType.BasicFilter
             };
 

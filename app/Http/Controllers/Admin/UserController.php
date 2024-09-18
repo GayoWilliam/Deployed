@@ -111,11 +111,17 @@ class UserController extends Controller
             if (empty($request->column_value)) {
                 $user->update(['column_value' => null]);
             } else {
-                $validated_data = $request->validate(['column_value' => ['required']]);
-                $user->update($validated_data);
+
+                $validated_data = $request->validate([
+                    'column_value' => ['required', 'array'],
+                ]);
+        
+                $user->update([
+                    'column_value' => json_encode($validated_data['column_value'])
+                ]);
             }
         }
-
+        
         return to_route('admin.users.index')->with('message', 'User updated successfully!');
     }
 

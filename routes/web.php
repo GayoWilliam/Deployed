@@ -10,10 +10,6 @@ use App\Http\Controllers\Admin\AssociationController;
 use App\Http\Controllers\Admin\DataFilterController;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 // Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -28,7 +24,7 @@ Route::middleware(['auth', 'can:view admin'])->name('admin.')->prefix('admin')->
     Route::post('/roles/{role}/permissions', [RoleController::class, 'givePermission'])->name('roles.permissions');
     Route::delete('/roles/{role}/permissions/{permission}', [RoleController::class, 'revokePermission'])->name('roles.permissions.revoke');
     Route::resource('/permissions', PermissionController::class);
-    Route::resource('/users', UserController::class)->middleware('can:view users');
+    Route::resource('/users', UserController::class)->middleware('can:view users');    
     Route::resource('/associations', AssociationController::class)->middleware('can:view associations');
     Route::resource('/filters', DataFilterController::class)->middleware('can:view filters');
     Route::put('/users/{user}/associate', [UserController::class, 'associateAzureAccount'])->name('associations');

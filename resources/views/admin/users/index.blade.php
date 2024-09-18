@@ -162,7 +162,7 @@
                                                     class="mt-1 block w-full min:w-4/5 border-0 bg-transparent text-xs
                                                             shadow-sm shadow-kenchic-blue group-hover:shadow-kenchic-gold hover:shadow-md focus:shadow-md focus:shadow-kenchic-blue focus:border-none focus:ring-0
                                                             rounded-md transition ease-in-out duration-150"
-                                                    id="role" name="role">
+                                                            name="role">
                                                     <option disabled selected>{{ $user->role }}</option>
                                                     @foreach ($roles as $role)
                                                         <option value="{{ $role->name }}"
@@ -188,7 +188,7 @@
                                                     class="mt-1 block w-full min:w-4/5 border-0 bg-transparent text-xs
                                                             shadow-sm shadow-kenchic-blue group-hover:shadow-kenchic-gold hover:shadow-md focus:shadow-md focus:shadow-kenchic-blue focus:border-none focus:ring-0
                                                             rounded-md transition ease-in-out duration-150"
-                                                    id="table_name" name="table_name">
+                                                            name="table_name">
                                                     <option value="" {{ $user->table_name ? '' : 'selected' }}>None
                                                     @foreach ($filters as $filter)
                                                         <option value="{{ $filter->table_name }}"
@@ -210,11 +210,13 @@
                                                 @csrf
                                                 @method('PUT')
 
-                                                <select id="column_name" name="column_name" onchange="this.form.submit()"
+                                                <select onchange="this.form.submit()"
                                                     class="mt-1 block w-full min:w-4/5 border-0 bg-transparent text-xs
                                                             shadow-sm shadow-kenchic-blue group-hover:shadow-kenchic-gold hover:shadow-md focus:shadow-md focus:shadow-kenchic-blue focus:border-none focus:ring-0
-                                                            rounded-md transition ease-in-out duration-150">
+                                                            rounded-md transition ease-in-out duration-150"
+                                                            name="column_name">
                                                     <option value="" {{ $user->column_name ? '' : 'selected' }}>None
+                                                    
                                                     @foreach ($filters as $filter)
                                                         <option value="{{ $filter->column_name }}"
                                                             {{ $user->column_name == $filter->column_name ? 'selected disabled' : '' }}>
@@ -231,27 +233,41 @@
                                     <!-- Column Value -->
                                     <td class="px-4 py-3 text-xs">
                                         @can('edit user value')
-                                            <form method="POST" action="{{ route('admin.users.update', $user->id) }}">
-                                                @csrf
-                                                @method('PUT')
-
-                                                <select id="column_value" name="column_value" onchange="this.form.submit()"
-                                                    class="mt-1 block w-full min:w-4/5 border-0 bg-transparent text-xs
-                                                            shadow-sm shadow-kenchic-blue group-hover:shadow-kenchic-gold hover:shadow-md focus:shadow-md focus:shadow-kenchic-blue focus:border-none focus:ring-0
-                                                            rounded-md transition ease-in-out duration-150">
-                                                    <option value="" {{ $user->column_value ? '' : 'selected' }}>None
-                                                    @php
-                                                        $current_filter = $filters->firstWhere('column_name', $user->column_name);
-                                                        $possible_values = $current_filter ? json_decode($current_filter->possible_values, true) : [];
-                                                    @endphp
-                                                    @foreach ($possible_values as $value)
-                                                        <option value="{{ $value }}"
-                                                            {{ $user->column_value == $value ? 'selected disabled' : '' }}>
-                                                            {{ $value }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </form>
+                                            <x-dropdown align="center" overflow="True" width="fit">
+                                                <x-slot name="trigger">
+                                                    <button class="shadow-sm shadow-kenchic-blue hover:shadow-md hover:shadow-kenchic-gold focus:shadow-kenchic-blue group-hover:shadow-kenchic-gold
+                                                        focus:shadow-md transition ease-in-out duration-150 rounded-md inline-flex items-center justify-between px-3 py-2 w-full">
+                                                            <span>Select Column Value</span>
+                                                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                    clip-rule="evenodd" />
+                                                            </svg>
+                                                    </button>
+                                                </x-slot>
+                                                
+                                                <x-slot name="content">
+                                                    <form method="POST" action="{{ route('admin.users.update', $user->id) }}">
+                                                        @csrf
+                                                        @method('PUT')
+                                                    
+                                                        @php
+                                                            $current_filter = $filters->firstWhere('column_name', $user->column_name);
+                                                            $possible_values = $current_filter ? json_decode($current_filter->possible_values, true) : [];
+                                                            $user_values = is_array($user->column_value) ? $user->column_value : explode(',', $user->column_value);
+                                                        @endphp
+                                                    
+                                                        @foreach ($possible_values as $value)
+                                                            <x-dropdown-link class="space-x-2">
+                                                                <input type="checkbox" name="column_value[]" value="{{ $value }}"
+                                                                    class="form-checkbox border border-kenchic-blue rounded-sm size-4 active:ring-0 active:border-0 active:outline-none"
+                                                                    onchange="this.form.submit()" {{ in_array($value, $user_values) ? 'checked' : '' }}>
+                                                                <span>{{ $value }}</span>
+                                                            </x-dropdown-link>
+                                                        @endforeach
+                                                    </form>
+                                                </x-slot>                                            
+                                            </x-dropdown>
                                         @else
                                             <span>{{ $user->column_value ?? 'None' }}</span>
                                         @endcan

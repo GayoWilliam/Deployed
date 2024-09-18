@@ -55,4 +55,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsTo(AssociatedAzure::class, 'azure_account_id');
     }
+
+    public function getColumnValueAttribute($value)
+    {
+        return json_decode($value, true);
+    }
 }
