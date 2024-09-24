@@ -15,7 +15,7 @@ class DashboardController extends Controller
 
         // Check if the user has an associated Power BI account
         if (!$accessToken || !$user->azureAccount) {
-            return view('dashboard', ['error' => "You cannot view the report because you don't have an associated Power BI account. Kindly contact your administrator."]);
+            return view('dashboard', ['c' => "You cannot view the report because you don't have an associated Power BI account. Kindly contact your administrator."]);
         }
 
         // Proceed with the Power BI API request

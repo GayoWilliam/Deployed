@@ -33,16 +33,12 @@ class AuthenticatedSessionController extends Controller
         $user = Auth::user();
         $associatedAccount = $user->azureAccount;
 
-        if (!$associatedAccount) {
-            return redirect()->back()->withErrors(['login' => 'No associated Azure account found.']);
-        }
-
         $tenantId = config('services.azure.tenant_id');
         $clientId = config('services.azure.client_id');
         $clientSecret = config('services.azure.client_secret');
         $azureUsername = $associatedAccount->azure_account;
-        $azurePassword = $associatedAccount->password;
-
+        $azurePassword = Crypt::decryptString($associatedAccount->password);
+        
         $response = Http::asForm()->post("https://login.microsoftonline.com/{$tenantId}/oauth2/v2.0/token", [
             'grant_type' => 'password',
             'client_id' => $clientId,
@@ -62,7 +58,7 @@ class AuthenticatedSessionController extends Controller
             }
         }
 
-        return redirect()->back()->withErrors(['login' => 'Authentication with Azure AD failed.']);
+        return back()->with('message', 'Authentication with Azure AD failed.');
     }
 
     public function destroy(Request $request): RedirectResponse
