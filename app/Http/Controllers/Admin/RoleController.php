@@ -39,11 +39,16 @@ class RoleController extends Controller
 
     public function update(Request $request, Role $role)
     {
-        $validated = $request->validate(['name' => 'required', 'role_description' => 'required|min:3']);
+        $validated = $request->validate([
+            'name' => 'sometimes|required',
+            'role_description' => 'sometimes|required|min:3',
+        ]);
+    
         $role->update($validated);
-
+    
         return to_route('admin.roles.index')->with('message', 'Role updated successfully!');
     }
+    
 
     public function destroy(Role $role)
     {

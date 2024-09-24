@@ -119,80 +119,106 @@
                                         <form method="POST" action="{{ route('admin.roles.update', $role->id) }}">
                                             @csrf
                                             @method('PUT')
-                                            <td class="px-4">
-                                                <x-text-input name="name" onchange="this.form.submit()"
-                                                    type="text"
-                                                    class="mb-2 group-hover:text-kenchic-gold group-hover:shadow-kenchic-gold"
-                                                    value=" {{ $role->name }}" />
+                                            <td class="p-4">
+                                                @can('edit role name')
+                                                    <x-text-input name="name" onchange="this.form.submit()"
+                                                        type="text"
+                                                        class="mb-2 group-hover:text-kenchic-gold group-hover:shadow-kenchic-gold"
+                                                        value=" {{ $role->name }}" />
+                                                @else
+                                                    <x-label-auth class="group-hover:text-kenchic-gold"
+                                                    value="{{ $role->name }}" />
+                                                @endcan
                                             </td>
-                                            <td class="px-4">
-                                                <x-text-input name="role_description" onchange="this.form.submit()"
-                                                    type="text"
-                                                    class="mb-2 group-hover:text-kenchic-gold group-hover:shadow-kenchic-gold"
-                                                    value=" {{ $role->role_description }}" />
+
+                                            <td class="p-4">
+                                                @can('edit role description')
+                                                    <x-text-input name="role_description" onchange="this.form.submit()"
+                                                        type="text"
+                                                        class="mb-2 group-hover:text-kenchic-gold group-hover:shadow-kenchic-gold"
+                                                        value=" {{ $role->role_description }}" />
+                                                @else
+                                                    <x-label-auth class="group-hover:text-kenchic-gold"
+                                                    value="{{ $role->role_description }}" />
+                                                @endcan                                            
                                             </td>
                                         </form>
 
                                         <td>
                                             <div class="grid grid-cols-3 gap-4 p-4">
                                                 @foreach ($role->permissions->sortBy('name') as $role_permission)
-                                                    <form method="POST"
-                                                        action="{{ route('admin.roles.permissions.revoke', [$role->id, $role_permission->id]) }}"
-                                                        onsubmit="return confirm('Are you sure you want to remove {{ $role_permission->name }} permission from role {{ $role->name }}?')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <x-danger-button
-                                                            class="w-full place-content-center"
-                                                            aria-label="Delete" type="submit">
-                                                            {{ $role_permission->name }}
-                                                        </x-danger-button>
-                                                    </form>
+                                                    @can('edit role permission(s)')
+                                                        <form method="POST"
+                                                            action="{{ route('admin.roles.permissions.revoke', [$role->id, $role_permission->id]) }}"
+                                                            onsubmit="return confirm('Are you sure you want to remove {{ $role_permission->name }} permission from role {{ $role->name }}?')">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <x-danger-button
+                                                                class="w-full place-content-center"
+                                                                aria-label="Delete" type="submit">
+                                                                {{ $role_permission->name }}
+                                                            </x-danger-button>
+                                                        </form>
+                                                    @else
+                                                        <x-label-auth class="group-hover:text-kenchic-gold"
+                                                        value="{{ $role_permission->name }}" />
+                                                    @endcan
                                                 @endforeach
                                             </div>
                                         </td>
-
+                                        
                                         <td class="py-2 px-4">
-                                            <form method="POST" id="permissionForm"
-                                                action="{{ route('admin.roles.permissions', $role->id) }}">
-                                                @csrf
-                                                <div class="">
-                                                    <select id="permission" name="permission"
-                                                        autocomplete="permission-name" onchange="this.form.submit()"
-                                                        class="text-xs block w-full bg-transparent rounded-md border-none focus:border-none hover:border-transparent
-                                                            shadow-sm shadow-kenchic-blue hover:shadow-lg hover:shadow-kenchic-gold group-hover:text-kenchic-gold group-hover:shadow-kenchic-gold group-hover:focus:shadow-kenchic-gold
-                                                            focus:shadow-md focus:shadow-kenchic-blue ring-0 focus:ring-0 transition ease-in-out duration-150">
-                                                        <option disabled selected>
-                                                            Select permission
-                                                        </option>
-                                                        @foreach ($permissions as $permission)
-                                                            <option value="{{ $permission->name }}">
-                                                                {{ $permission->name }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </form>
+                                            @can('assign role permission(s)')
+                                                <form method="POST" id="permissionForm"
+                                                    action="{{ route('admin.roles.permissions', $role->id) }}">
+                                                    @csrf
+                                                    <div class="">
+                                                        <select id="permission" name="permission"
+                                                            autocomplete="permission-name" onchange="this.form.submit()"
+                                                            class="text-xs block w-full bg-transparent rounded-md border-none focus:border-none hover:border-transparent
+                                                                shadow-sm shadow-kenchic-blue hover:shadow-lg hover:shadow-kenchic-gold group-hover:text-kenchic-gold group-hover:shadow-kenchic-gold group-hover:focus:shadow-kenchic-gold
+                                                                focus:shadow-md focus:shadow-kenchic-blue ring-0 focus:ring-0 transition ease-in-out duration-150">
+                                                            <option disabled selected>
+                                                                Select permission
+                                                            </option>
+                                                            @foreach ($permissions as $permission)
+                                                                <option value="{{ $permission->name }}">
+                                                                    {{ $permission->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </form>
+                                            @else
+                                                <x-label-auth class="group-hover:text-kenchic-gold"
+                                                value="Not allowed" />
+                                            @endcan
                                         </td>
 
                                         <td class="px-4 py-3">
-                                            <div class="flex items-center space-x-4">
-                                                <!-- Delete Role -->
-                                                <form method="POST"
-                                                    action="{{ route('admin.roles.destroy', $role->id) }}"
-                                                    onsubmit="return confirm('Are you sure you want to delete {{ $role->name }}?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button
-                                                        class="flex items-center justify-between text-kenchic-red focus:outline-none focus:shadow-outline-gray transform hover:scale-125"
-                                                        aria-label="Delete" type="submit">
-                                                        <svg class="w-5 h-5" aria-hidden="true" fill="currentColor"
-                                                            viewBox="0 0 20 20">
-                                                            <path fill-rule="evenodd"
-                                                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                                                clip-rule="evenodd"></path>
-                                                        </svg>
-                                                    </button>
-                                                </form>
-                                            </div>
+                                            @can('delete role')
+                                                <div class="flex items-center space-x-4">
+                                                    <!-- Delete Role -->
+                                                    <form method="POST"
+                                                        action="{{ route('admin.roles.destroy', $role->id) }}"
+                                                        onsubmit="return confirm('Are you sure you want to delete {{ $role->name }}?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button
+                                                            class="flex items-center justify-between text-kenchic-red focus:outline-none focus:shadow-outline-gray transform hover:scale-125"
+                                                            aria-label="Delete" type="submit">
+                                                            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor"
+                                                                viewBox="0 0 20 20">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                                    clip-rule="evenodd"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            @else
+                                                <x-label-auth class="group-hover:text-kenchic-gold"
+                                                value="Not allowed" />
+                                            @endcan
                                         </td>
                                     @endif
                                 </tr>

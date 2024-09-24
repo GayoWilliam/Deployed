@@ -94,8 +94,8 @@
                                         <p>{{ implode(', ', json_decode($filter->possible_values, true)) }}</p>
                                     </td>
                                     
-                                    @can('delete filters')
-                                        <td class="px-4">
+                                    <td class="px-4">
+                                        @can('delete filters')
                                             <div class="flex items-center space-x-4 text-xs">
                                                 <form method="POST" action="{{ route('admin.filters.destroy', $filter->id) }}"
                                                     onsubmit="return confirm('Are you sure you want to delete {{ $filter->table_name }}?')">
@@ -111,8 +111,8 @@
                                                     </button>
                                                 </form>
                                             </div>
-                                        </td>
-                                    @endcan
+                                        @endcan
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

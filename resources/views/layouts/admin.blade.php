@@ -39,7 +39,7 @@
             <div @click.away="open = false" class="flex flex-col flex-shrink-0 w-60" x-data="{ open: false }">
                 <nav :class="{ 'block': open, 'hidden': !open }"
                     class="flex-grow p-4 space-y-3 bg-kenchic-blue mt-5 rounded-md ml-5 md:block overflow-y-auto">
-                    @can('view roles and permissions')
+                    @can('view authorizations')
                         <div @click.away="open = false" class="relative" x-data="{ open: false }">
                             <x-admin-link @click="open = !open">Authorization
                                 <svg fill="currentColor" viewBox="0 0 20 20"
@@ -59,9 +59,11 @@
                                 x-transition:leave-end="transform opacity-0 scale-95"
                                 class="relative right-0 w-full mt-2 origin-top-right rounded-md shadow-inner shadow-kenchic-gold">
                                 <div class="px-2 py-3">
-                                    <x-admin-link :href="route('admin.roles.index')" :active="request()->routeIs('admin.roles.index')">Roles</x-admin-link>
-                                    <x-admin-link :href="route('admin.permissions.index')" :active="request()->routeIs('admin.permissions.index')">Permissions</x-admin-link>
-                                    @can('view associations')
+                                    @can('view roles and permissions')
+                                        <x-admin-link :href="route('admin.roles.index')" :active="request()->routeIs('admin.roles.index')">Roles</x-admin-link>
+                                        <x-admin-link :href="route('admin.permissions.index')" :active="request()->routeIs('admin.permissions.index')">Permissions</x-admin-link>
+                                    @endcan
+                                    @can('view powerbi account(s)')
                                         <x-admin-link :href="route('admin.associations.index')" :active="request()->routeIs('admin.associations.index')">Account Associations</x-admin-link>
                                     @endcan
                                     @can('view data filters')
